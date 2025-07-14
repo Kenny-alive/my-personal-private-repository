@@ -1,13 +1,15 @@
+import { Component } from 'react';
+
 interface ErrorMessageProps {
   message: string;
 }
 
-function ErrorMessage(props: ErrorMessageProps) {
-  return (
-    <div className="text-red-600 text-center min-h-[300px] flex items-center justify-center">
-      <p>Error: {props.message}</p>
-    </div>
-  );
+export default class ErrorMessage extends Component<ErrorMessageProps> {
+  render() {
+    return (
+      <div className="text-red-600 text-center min-h-[300px] flex items-center justify-center">
+        <p>Error: {this.props.message}</p>
+      </div>
+    );
+  }
 }
-
-export default ErrorMessage;

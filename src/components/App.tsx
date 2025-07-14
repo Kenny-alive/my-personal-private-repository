@@ -24,6 +24,11 @@ export default class App extends Component<Record<string, never>, AppState> {
     error: null,
   };
 
+  componentDidMount() {
+    // При первом рендере запускаем поиск с пустым запросом
+    this.handleSearch('');
+  }
+
   handleSearch = async (searchTerm: string) => {
     this.setState({ loading: true, error: null, books: [] });
 
