@@ -25,7 +25,6 @@ export default class App extends Component<Record<string, never>, AppState> {
   };
 
   componentDidMount() {
-    // При первом рендере запускаем поиск с пустым запросом
     this.handleSearch('');
   }
 
