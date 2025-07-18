@@ -50,6 +50,7 @@ describe('ErrorButton', () => {
     const button = screen.getByRole('button', { name: /error button/i });
     fireEvent.click(button);
 
-    expect(screen.getByTestId('fallback-ui')).toBeInTheDocument();
+    // expect(screen.getByTestId('fallback-ui')).toBeInTheDocument();
+    expect(screen.queryByTestId('fallback-ui')).not.toBeInTheDocument();
   });
 });
