@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1752923193990" clover="3.2.0">
-  <project timestamp="1752923193990" name="All files">
-    <metrics statements="99" coveredstatements="47" conditionals="34" coveredconditionals="15" methods="25" coveredmethods="15" elements="158" coveredelements="77" complexity="0" loc="99" ncloc="99" packages="1" files="12" classes="12"/>
+<coverage generated="1752931089376" clover="3.2.0">
+  <project timestamp="1752931089376" name="All files">
+    <metrics statements="99" coveredstatements="59" conditionals="34" coveredconditionals="21" methods="25" coveredmethods="16" elements="158" coveredelements="96" complexity="0" loc="99" ncloc="99" packages="1" files="12" classes="12"/>
     <file name="App.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\App.tsx">
       <metrics statements="21" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <line num="1" count="0" type="stmt"/>
@@ -27,41 +27,41 @@
       <line num="68" count="0" type="stmt"/>
     </file>
     <file name="BottomSection.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\BottomSection.tsx">
-      <metrics statements="12" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <line num="1" count="0" type="stmt"/>
-      <line num="2" count="0" type="stmt"/>
-      <line num="3" count="0" type="stmt"/>
-      <line num="4" count="0" type="stmt"/>
-      <line num="5" count="0" type="stmt"/>
-      <line num="21" count="0" type="stmt"/>
-      <line num="23" count="0" type="stmt"/>
-      <line num="24" count="0" type="stmt"/>
-      <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="30" count="0" type="stmt"/>
+      <metrics statements="12" coveredstatements="12" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="23" count="4" type="stmt"/>
+      <line num="24" count="4" type="stmt"/>
+      <line num="26" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="27" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="28" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="30" count="1" type="stmt"/>
     </file>
     <file name="Card.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\Card.tsx">
       <metrics statements="4" coveredstatements="4" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="11" count="1" type="stmt"/>
-      <line num="13" count="5" type="stmt"/>
-      <line num="15" count="5" type="stmt"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="11" count="2" type="stmt"/>
+      <line num="13" count="7" type="stmt"/>
+      <line num="15" count="7" type="stmt"/>
     </file>
     <file name="CardList.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\CardList.tsx">
       <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="2" count="1" type="stmt"/>
-      <line num="16" count="1" type="stmt"/>
-      <line num="18" count="2" type="stmt"/>
-      <line num="20" count="2" type="stmt"/>
-      <line num="23" count="2" type="stmt"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="2" count="2" type="stmt"/>
+      <line num="16" count="2" type="stmt"/>
+      <line num="18" count="3" type="stmt"/>
+      <line num="20" count="3" type="stmt"/>
+      <line num="23" count="4" type="stmt"/>
     </file>
     <file name="EmptyState.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\EmptyState.tsx">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="3" count="1" type="stmt"/>
-      <line num="5" count="2" type="stmt"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="3" count="2" type="stmt"/>
+      <line num="5" count="3" type="stmt"/>
     </file>
     <file name="ErrorBoundary.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\ErrorBoundary.tsx">
       <metrics statements="10" coveredstatements="9" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="3"/>
@@ -89,9 +89,9 @@
     </file>
     <file name="ErrorMessage.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\ErrorMessage.tsx">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="7" count="1" type="stmt"/>
-      <line num="9" count="1" type="stmt"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="7" count="2" type="stmt"/>
+      <line num="9" count="2" type="stmt"/>
     </file>
     <file name="Header.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\Header.tsx">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -100,9 +100,9 @@
     </file>
     <file name="Loading.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\Loading.tsx">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="3" count="1" type="stmt"/>
-      <line num="5" count="2" type="stmt"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="3" count="2" type="stmt"/>
+      <line num="5" count="3" type="stmt"/>
     </file>
     <file name="SearchBar.tsx" path="E:\javascript\react\my-personal-private-repository\src\components\SearchBar.tsx">
       <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
