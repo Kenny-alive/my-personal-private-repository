@@ -51,6 +51,5 @@ describe('ErrorButton', () => {
     fireEvent.click(button);
 
     expect(screen.getByTestId('fallback-ui')).toBeInTheDocument();
-    // aexpect(screen.queryByTestId('fallback-ui')).not.toBeInTheDocument();
   });
 });
