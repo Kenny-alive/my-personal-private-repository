@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import Loading from './Loading';
 import ErrorMessage from './ErrorMessage';
 import EmptyState from './EmptyState';
@@ -18,15 +17,16 @@ interface BottomSectionProps {
   error: string | null;
 }
 
-export default class BottomSection extends Component<BottomSectionProps> {
-  render() {
-    const { books, loading, error } = this.props;
-    const booksToRender = books.slice(0, 20);
+export default function BottomSection({
+  books,
+  loading,
+  error,
+}: BottomSectionProps) {
+  const booksToRender = books.slice(0, 20);
 
-    if (loading) return <Loading />;
-    if (error) return <ErrorMessage message={error} />;
-    if (books.length === 0) return <EmptyState />;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
+  if (books.length === 0) return <EmptyState />;
 
-    return <CardList books={booksToRender} />;
-  }
+  return <CardList books={booksToRender} />;
 }
