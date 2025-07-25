@@ -1,55 +1,35 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import Header from './Header';
 import SearchBar from './SearchBar';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 interface TopSectionProps {
   onSearch: (searchTerm: string) => void;
 }
 
-interface TopSectionState {
-  searchTerm: string;
-}
-
-export default class TopSection extends Component<
-  TopSectionProps,
-  TopSectionState
-> {
-  constructor(props: TopSectionProps) {
-    super(props);
-    this.state = {
-      searchTerm: '',
-    };
-  }
-
-  componentDidMount() {
-    const savedTerm = localStorage.getItem('searchTerm') || '';
-    this.setState({ searchTerm: savedTerm });
-    if (savedTerm.trim() !== '') {
-      this.props.onSearch(savedTerm.trim());
+export default function TopSection({ onSearch }: TopSectionProps) {
+  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
+  useEffect(() => {
+    if (searchTerm.trim() !== '') {
+      onSearch(searchTerm.trim());
     }
-  }
-
-  handleInputChange = (value: string) => {
-    this.setState({ searchTerm: value });
+  }, [onSearch, searchTerm]);
+  const handleInputChange = (value: string) => {
+    setSearchTerm(value);
   };
-
-  handleSearch = () => {
-    const trimmedTerm = this.state.searchTerm.trim();
-    this.setState({ searchTerm: trimmedTerm });
-    localStorage.setItem('searchTerm', trimmedTerm);
-    this.props.onSearch(trimmedTerm);
+  const handleSearch = () => {
+    const trimmed = searchTerm.trim();
+    setSearchTerm(trimmed);
+    onSearch(trimmed);
   };
-
-  render() {
-    return (
-      <>
-        <Header />
-        <SearchBar
-          value={this.state.searchTerm}
-          onChange={this.handleInputChange}
-          onSearch={this.handleSearch}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <Header />
+      <SearchBar
+        value={searchTerm}
+        onChange={handleInputChange}
+        onSearch={handleSearch}
+      />
+    </>
+  );
 }
