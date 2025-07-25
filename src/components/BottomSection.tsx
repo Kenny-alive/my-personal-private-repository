@@ -4,7 +4,7 @@ import ErrorMessage from './ErrorMessage';
 import EmptyState from './EmptyState';
 import CardList from './CardList';
 
-interface BookBase {
+export interface BookBase {
   uid: string;
   title: string;
   description?: string;

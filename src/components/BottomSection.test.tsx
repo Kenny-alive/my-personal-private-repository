@@ -1,13 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import BottomSection from '../components/BottomSection';
-
-type BookBase = {
-  uid: string;
-  title: string;
-  description?: string;
-  publishedYearFrom?: number;
-  novel?: boolean;
-};
+import BottomSection, { BookBase } from '../components/BottomSection';
 
 describe('BottomSection', () => {
   const sampleBooks: BookBase[] = [
