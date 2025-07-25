@@ -10,7 +10,7 @@ describe('Loading component', () => {
 
   test('renders spinner div', () => {
     render(<Loading />);
-    const spinner = document.querySelector('div.animate-spin');
+    const spinner = screen.getByTestId('spinner');
     expect(spinner).toBeInTheDocument();
   });
 });
