@@ -1,7 +1,7 @@
-import { Component } from 'react';
 import TopSection from './TopSection';
 import BottomSection from './BottomSection';
 import ErrorButton from './ErrorButton';
+import { useEffect, useState, useCallback } from 'react';
 
 interface BookBase {
   uid: string;
@@ -11,32 +11,22 @@ interface BookBase {
   novel?: boolean;
 }
 
-interface AppState {
-  books: BookBase[];
-  loading: boolean;
-  error: string | null;
-}
+export default function App() {
+  const [error, setError] = useState<string | null>(null);
+  const [books, setBooks] = useState<BookBase[]>([]);
+  const [loading, setLoading] = useState(false);
 
-export default class App extends Component<Record<string, never>, AppState> {
-  state: AppState = {
-    books: [],
-    loading: false,
-    error: null,
-  };
-
-  componentDidMount() {
-    this.handleSearch('');
-  }
-
-  handleSearch = async (searchTerm: string) => {
-    this.setState({ loading: true, error: null, books: [] });
+  const handleSearch = useCallback(async (searchTerm: string) => {
+    setLoading(true);
+    setError(null);
+    setBooks([]);
 
     try {
       const body = new URLSearchParams();
       if (searchTerm) body.append('title', searchTerm);
 
       const response = await fetch(
-        `https://stapi.co/api/v1/rest/book/search?pageNumber=0&pageSize=20`,
+        'https://stapi.co/api/v1/rest/book/search?pageNumber=0&pageSize=20',
         {
           method: 'POST',
           headers: {
@@ -51,26 +41,24 @@ export default class App extends Component<Record<string, never>, AppState> {
       }
 
       const data = await response.json();
-      const books: BookBase[] = data.books || [];
-
-      this.setState({ books, loading: false, error: null });
+      const fetchedBooks: BookBase[] = data.books || [];
+      setBooks(fetchedBooks);
     } catch (err) {
-      this.setState({
-        loading: false,
-        error: err instanceof Error ? err.message : 'Unknown error',
-      });
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  render() {
-    const { books, loading, error } = this.state;
+  useEffect(() => {
+    handleSearch('');
+  }, [handleSearch]);
 
-    return (
-      <>
-        <TopSection onSearch={this.handleSearch} />
-        <BottomSection books={books} loading={loading} error={error} />
-        <ErrorButton />
-      </>
-    );
-  }
+  return (
+    <>
+      <TopSection onSearch={handleSearch} />
+      <BottomSection books={books} loading={loading} error={error} />
+      <ErrorButton />
+    </>
+  );
 }
