@@ -4,6 +4,7 @@ interface CardProps {
   description?: string;
   publishedYearFrom?: number;
   novel?: boolean;
+  onClick?: () => void;
 }
 
 export default function Card({
@@ -11,9 +12,11 @@ export default function Card({
   description,
   publishedYearFrom,
   novel,
+  onClick,
 }: CardProps) {
   return (
     <div
+      onClick={onClick}
       className="rounded-lg shadow-md cursor-pointer max-w-xs w-full p-4 flex flex-col
           bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700
           text-white hover:from-blue-600 hover:via-indigo-700 hover:to-purple-800

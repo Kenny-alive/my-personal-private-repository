@@ -15,12 +15,14 @@ interface BottomSectionProps {
   books: BookBase[];
   loading: boolean;
   error: string | null;
+  onSelectBook: (uid: string) => void;
 }
 
 export default function BottomSection({
   books,
   loading,
   error,
+  onSelectBook,
 }: BottomSectionProps) {
   const booksToRender = books.slice(0, 20);
 
@@ -28,5 +30,5 @@ export default function BottomSection({
   if (error) return <ErrorMessage message={error} />;
   if (books.length === 0) return <EmptyState />;
 
-  return <CardList books={booksToRender} />;
+  return <CardList books={booksToRender} onSelectBook={onSelectBook} />;
 }
