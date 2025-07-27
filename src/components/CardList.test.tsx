@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import CardList from './CardList';
 
 interface BookBase {
@@ -11,17 +11,22 @@ interface BookBase {
 
 jest.mock('./Card', () => ({
   __esModule: true,
-  default: ({ title }: BookBase) => <div data-testid="card">{title}</div>,
+  default: ({ title, onClick }: { title: string; onClick: () => void }) => (
+    <div data-testid="card" onClick={onClick}>
+      {title}
+    </div>
+  ),
 }));
 
 describe('CardList', () => {
-  test('renders list of Card components based on books prop', () => {
-    const mockBooks: BookBase[] = [
-      { uid: '1', title: 'Book One' },
-      { uid: '2', title: 'Book Two' },
-    ];
+  const mockBooks: BookBase[] = [
+    { uid: '1', title: 'Book One' },
+    { uid: '2', title: 'Book Two' },
+  ];
 
-    render(<CardList books={mockBooks} />);
+  test('renders list of Card components based on books prop', () => {
+    const mockOnSelectBook = jest.fn();
+    render(<CardList books={mockBooks} onSelectBook={mockOnSelectBook} />);
 
     const cards = screen.getAllByTestId('card');
     expect(cards).toHaveLength(mockBooks.length);
@@ -30,7 +35,19 @@ describe('CardList', () => {
   });
 
   test('renders empty when books prop is empty', () => {
-    render(<CardList books={[]} />);
+    const mockOnSelectBook = jest.fn();
+    render(<CardList books={[]} onSelectBook={mockOnSelectBook} />);
     expect(screen.queryByTestId('card')).not.toBeInTheDocument();
+  });
+
+  test('calls onSelectBook with correct uid when card is clicked', () => {
+    const mockOnSelectBook = jest.fn();
+    render(<CardList books={mockBooks} onSelectBook={mockOnSelectBook} />);
+
+    const firstCard = screen.getAllByTestId('card')[0];
+    fireEvent.click(firstCard);
+
+    expect(mockOnSelectBook).toHaveBeenCalledTimes(1);
+    expect(mockOnSelectBook).toHaveBeenCalledWith('1');
   });
 });
