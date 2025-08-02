@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import type { ReactElement } from 'react';
+import ThemeContext from './ThemeProvider';
 
 interface ErrorBoundaryProps {
   children: ReactElement;
@@ -14,6 +15,8 @@ export default class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
+  static contextType = ThemeContext;
+  declare context: React.ContextType<typeof ThemeContext>;
   state: ErrorBoundaryState = {
     hasError: false,
     error: null,
@@ -32,15 +35,24 @@ export default class ErrorBoundary extends Component<
   };
 
   render() {
+    const { theme } = this.context || { theme: 'light' };
     if (this.state.hasError && this.state.error) {
       return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100 text-center p-6">
+        <div
+          className={`flex flex-col items-center justify-center h-screen text-center p-6 ${
+            theme === 'dark'
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-100 text-gray-800'
+          }`}
+        >
           <img
             src="/images/Error.gif"
             alt="Error illustration"
             className="w-60 h-auto mb-6"
           />
-          <p className="text-lg text-gray-800 mb-6">
+          <p
+            className={`text-lg mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}
+          >
             {this.state.error.message}
           </p>
           <button

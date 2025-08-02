@@ -8,12 +8,12 @@ import { ThemeProvider } from './components/ThemeProvider';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ErrorBoundary>
-      <ThemeProvider>
+    <ThemeProvider>
+      <ErrorBoundary>
         <BrowserRouter>
           <RouterWrapper />
         </BrowserRouter>
-      </ThemeProvider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </ThemeProvider>
   </StrictMode>
 );

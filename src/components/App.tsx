@@ -4,6 +4,7 @@ import ErrorButton from './ErrorButton';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router';
 import BookDetails from './BookDetails';
+import { useStore } from '../store/useStore';
 
 export interface BookBase {
   uid: string;
@@ -26,30 +27,19 @@ export default function App() {
 
   const lastSearchRef = useRef<string>('');
 
-  const [selectedBookUid, setSelectedBookUid] = useState<string | null>(null);
+  const selectedDetailUid = useStore((state) => state.selectedDetailUid);
+  const setSelectedDetailUid = useStore((state) => state.setSelectedDetailUid);
+
   const [bookDetails, setBookDetails] = useState<BookBase | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
 
-  const onSelectBook = useCallback(
-    (uid: string) => {
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        params.set('details', uid);
-        return params;
-      });
-    },
-    [setSearchParams]
-  );
-
   useEffect(() => {
-    const uid = searchParams.get('details');
-    if (uid) {
-      setSelectedBookUid(uid);
+    if (selectedDetailUid) {
       setDetailsLoading(true);
       setDetailsError(null);
 
-      fetch(`https://stapi.co/api/v1/rest/book?uid=${uid}`)
+      fetch(`https://stapi.co/api/v1/rest/book?uid=${selectedDetailUid}`)
         .then((res) => {
           if (!res.ok) throw new Error(`Error: ${res.status}`);
           return res.json();
@@ -63,11 +53,21 @@ export default function App() {
           setDetailsLoading(false);
         });
     } else {
-      setSelectedBookUid(null);
       setBookDetails(null);
       setDetailsError(null);
     }
-  }, [searchParams]);
+  }, [selectedDetailUid]);
+
+  const onSelectBook = useCallback(
+    (uid: string) => {
+      setSelectedDetailUid(uid);
+    },
+    [setSelectedDetailUid]
+  );
+
+  const closeDetails = () => {
+    setSelectedDetailUid(null);
+  };
 
   const handleSearch = useCallback(
     async (searchTerm: string) => {
@@ -114,17 +114,6 @@ export default function App() {
   );
 
   useEffect(() => {
-    const uid = searchParams.get('details');
-    if (uid && uid !== selectedBookUid) {
-      onSelectBook(uid);
-    } else if (!uid) {
-      setSelectedBookUid(null);
-      setBookDetails(null);
-      setDetailsError(null);
-    }
-  }, [searchParams, onSelectBook, selectedBookUid]);
-
-  useEffect(() => {
     handleSearch(lastSearchRef.current);
   }, [handleSearch]);
 
@@ -132,18 +121,7 @@ export default function App() {
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
       params.set('page', String(newPage));
-      params.delete('details');
-      return params;
-    });
-  };
-
-  const closeDetails = () => {
-    setSelectedBookUid(null);
-    setBookDetails(null);
-    setDetailsError(null);
-
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
+      setSelectedDetailUid(null);
       params.delete('details');
       return params;
     });
@@ -186,7 +164,7 @@ export default function App() {
           </div>
         </div>
 
-        {selectedBookUid && (
+        {selectedDetailUid && (
           <div
             className="w-1/3 border-gray-300 p-4 bg-white"
             style={{
