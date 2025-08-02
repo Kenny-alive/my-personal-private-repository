@@ -170,7 +170,10 @@ export default function App() {
             >
               Previous
             </button>
-            <span className="px-4 py-2 text-lg font-semibold">
+            <span
+              className="px-4 py-2 text-lg font-semibold"
+              style={{ color: 'var(--text-color)' }}
+            >
               Page {safePage}
             </span>
             <button
@@ -184,7 +187,13 @@ export default function App() {
         </div>
 
         {selectedBookUid && (
-          <div className="w-1/3 border-l border-gray-300 p-4 bg-white">
+          <div
+            className="w-1/3 border-gray-300 p-4 bg-white"
+            style={{
+              backgroundColor: 'var(--bg-color)',
+              color: 'var(--text-color)',
+            }}
+          >
             <BookDetails
               book={bookDetails}
               loading={detailsLoading}

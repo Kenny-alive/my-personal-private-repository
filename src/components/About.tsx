@@ -2,10 +2,20 @@ import { Link } from 'react-router';
 
 export default function About() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center bg-gray-50">
-      <h1 className="text-5xl font-extrabold mb-6 text-purple-700">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen px-4 text-center"
+      style={{
+        backgroundColor: 'var(--bg-color)',
+        color: 'var(--text-color)',
+      }}
+    >
+      <h1
+        className="text-5xl font-extrabold mb-6"
+        style={{ color: 'var(--link-color)' }}
+      >
         About This App
       </h1>
+
       <p className="text-xl mb-4 max-w-xl">
         This application was created by{' '}
         <a
@@ -51,6 +61,7 @@ export default function About() {
           ease-in-out
           active:scale-95
         "
+        style={{ color: 'var(--link-color)', borderColor: 'var(--link-color)' }}
       >
         <span className="mr-2 text-2xl">←</span>
         Back to App

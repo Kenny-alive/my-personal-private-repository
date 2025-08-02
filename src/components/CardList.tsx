@@ -15,7 +15,10 @@ interface CardListProps {
 
 export default function CardList({ books, onSelectBook }: CardListProps) {
   return (
-    <div className="flex flex-wrap justify-center gap-4 p-6 bg-gray-50 min-h-screen">
+    <div
+      className="flex flex-wrap justify-center gap-4 p-6 min-h-screen"
+      style={{ backgroundColor: 'var(--bg-color)' }}
+    >
       {books.map((book) => (
         <Card key={book.uid} {...book} onClick={() => onSelectBook(book.uid)} />
       ))}

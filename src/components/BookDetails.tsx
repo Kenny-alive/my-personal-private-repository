@@ -32,14 +32,27 @@ export default function BookDetails({
 }: BookDetailsProps) {
   if (loading) {
     return (
-      <div className="p-4 text-blue-600 font-semibold">
+      <div
+        className="p-4 text-blue-600 font-semibold"
+        style={{ color: 'var(--link-color)' }}
+      >
         Loading book details...
       </div>
     );
   }
 
   if (error) {
-    return <div className="p-4 text-red-600 font-semibold">Error: {error}</div>;
+    return (
+      <div
+        className="p-4 text-red-600 font-semibold"
+        style={{
+          color: 'var(--text-color)',
+          backgroundColor: 'var(--bg-color)',
+        }}
+      >
+        Error: {error}
+      </div>
+    );
   }
 
   if (!book) {
@@ -56,26 +69,54 @@ export default function BookDetails({
     book.publishers?.map((p) => p.name).join(', ') || 'Unknown';
 
   return (
-    <div className="p-4 border-l border-gray-300 min-h-screen bg-white">
+    <div
+      className="p-4  min-h-screen"
+      style={{
+        backgroundColor: 'var(--bg-color)',
+        color: 'var(--text-color)',
+        borderColor: 'var(--border-color)',
+      }}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">{book.title}</h2>
         <button
-          className="text-sm px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded"
+          className="text-sm px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 dark:text-gray-900"
           onClick={onClose}
         >
           Close
         </button>
       </div>
 
-      <p className="text-gray-800 mb-2">Published Date: {publishDate}</p>
-      <p className="text-gray-800 mb-2">
+      <p
+        className="text-gray-800 mb-2"
+        style={{ color: 'var(--text-secondary)' }}
+      >
+        Published Date: {publishDate}
+      </p>
+      <p
+        className="text-gray-800 mb-2"
+        style={{ color: 'var(--text-secondary)' }}
+      >
         Pages: {book.numberOfPages ?? 'Unknown'}
       </p>
-      <p className="text-gray-800 mb-2">
+      <p
+        className="text-gray-800 mb-2"
+        style={{ color: 'var(--text-secondary)' }}
+      >
         Type: {book.novel ? 'Novel' : 'Other'}
       </p>
-      <p className="text-gray-800 mb-2">Authors: {authors}</p>
-      <p className="text-gray-800 mb-2">Publishers: {publishers}</p>
+      <p
+        className="text-gray-800 mb-2"
+        style={{ color: 'var(--text-secondary)' }}
+      >
+        Authors: {authors}
+      </p>
+      <p
+        className="text-gray-800 mb-2"
+        style={{ color: 'var(--text-secondary)' }}
+      >
+        Publishers: {publishers}
+      </p>
     </div>
   );
 }
