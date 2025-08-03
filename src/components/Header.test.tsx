@@ -1,12 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import Header from '../components/Header';
 import { MemoryRouter } from 'react-router';
+import { ThemeProvider } from './ThemeProvider';
 
 describe('Header component', () => {
   test('renders with correct text and classes', () => {
     render(
       <MemoryRouter>
-        <Header />
+        <ThemeProvider>
+          <Header />
+        </ThemeProvider>
       </MemoryRouter>
     );
 

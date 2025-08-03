@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router';
 import BookDetails from './BookDetails';
 import { useStore } from '../store/useStore';
+import SelectedItemsFlyout from './SelectedItemFlyout';
 
 export interface BookBase {
   uid: string;
@@ -131,7 +132,7 @@ export default function App() {
     <>
       <TopSection onSearch={handleSearch} />
 
-      <div className="flex min-h-[70vh]">
+      <div className="flex min-h-[70vh] pb-28">
         <div className="flex-1 pr-4">
           <BottomSection
             books={books}
@@ -183,6 +184,7 @@ export default function App() {
       </div>
 
       <ErrorButton />
+      <SelectedItemsFlyout />
     </>
   );
 }
