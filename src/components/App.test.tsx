@@ -6,6 +6,7 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App, { BookBase } from './App';
 
 jest.mock('./TopSection', () => () => <div data-testid="top-section" />);
@@ -43,6 +44,8 @@ jest.mock('react-router', () => ({
   useSearchParams: () => [getSearchParamsMock(), setSearchParamsMock],
 }));
 
+const queryClient = new QueryClient();
+
 beforeEach(() => {
   (global.fetch as jest.Mock) = jest.fn().mockResolvedValue({
     ok: true,
@@ -50,6 +53,7 @@ beforeEach(() => {
   });
   setSearchParamsMock.mockClear();
   getSearchParamsMock.mockClear();
+  queryClient.clear();
 });
 
 afterEach(() => {
@@ -60,7 +64,9 @@ test('renders App and fetches data on mount', async () => {
   await act(async () => {
     render(
       <MemoryRouter>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
       </MemoryRouter>
     );
   });
@@ -95,16 +101,24 @@ test('pagination buttons call setSearchParams correctly', async () => {
   await act(async () => {
     render(
       <MemoryRouter>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
       </MemoryRouter>
     );
+  });
+
+  await waitFor(() => {
+    expect(screen.getByText('Test Book')).toBeInTheDocument();
   });
 
   const prevButton = screen.getByText(/Previous/i);
   const nextButton = screen.getByText(/Next/i);
 
-  expect(prevButton).not.toBeDisabled();
-  expect(nextButton).not.toBeDisabled();
+  await waitFor(() => {
+    expect(prevButton).not.toBeDisabled();
+    expect(nextButton).not.toBeDisabled();
+  });
 
   await act(async () => {
     fireEvent.click(prevButton);
