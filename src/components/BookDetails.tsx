@@ -20,6 +20,7 @@ interface DetailedBook extends BookBase {
 interface BookDetailsProps {
   book: DetailedBook | null;
   loading: boolean;
+  fetching?: boolean;
   error: string | null;
   onClose: () => void;
 }
@@ -27,6 +28,7 @@ interface BookDetailsProps {
 export default function BookDetails({
   book,
   loading,
+  fetching,
   error,
   onClose,
 }: BookDetailsProps) {
@@ -70,13 +72,19 @@ export default function BookDetails({
 
   return (
     <div
-      className="p-4  min-h-screen"
+      className="p-4 min-h-screen"
       style={{
         backgroundColor: 'var(--bg-color)',
         color: 'var(--text-color)',
         borderColor: 'var(--border-color)',
       }}
     >
+      {fetching && !loading && (
+        <p className="mb-2 text-sm text-indigo-600 font-semibold">
+          Updating book details...
+        </p>
+      )}
+
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">{book.title}</h2>
         <button
