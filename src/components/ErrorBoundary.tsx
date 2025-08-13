@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 import ThemeContext from './ThemeProvider';
 
 interface ErrorBoundaryProps {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 interface ErrorBoundaryState {
