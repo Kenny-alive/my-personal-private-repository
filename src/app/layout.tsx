@@ -1,3 +1,4 @@
+import '../main.css';
 import { ReactNode } from 'react';
 import ClientProviders from '../components/ClientProviders';
 

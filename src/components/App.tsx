@@ -2,7 +2,7 @@ import TopSection from './TopSection';
 import BottomSection from './BottomSection';
 import ErrorButton from './ErrorButton';
 import { useCallback, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router';
+import { useSearchParams, useRouter } from 'next/navigation';
 import BookDetails from './BookDetails';
 import { useStore } from '../store/useStore';
 import SelectedItemsFlyout from './SelectedItemFlyout';
@@ -19,7 +19,8 @@ export interface BookBase {
 }
 
 export default function App() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const rawPage = searchParams.get('page');
   const page = Number(rawPage);
@@ -57,41 +58,37 @@ export default function App() {
   const onSelectBook = useCallback(
     (uid: string) => {
       setSelectedDetailUid(uid);
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        params.set('details', uid);
-        return params;
-      });
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('details', uid);
+      router.push(`/?${params.toString()}`);
     },
-    [setSelectedDetailUid, setSearchParams]
+    [setSelectedDetailUid, searchParams, router]
   );
 
   const closeDetails = () => {
     setSelectedDetailUid(null);
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      params.delete('details');
-      return params;
-    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('details');
+    router.push(`/?${params.toString()}`);
   };
 
   const handleSearch = useCallback(
     (searchTerm: string) => {
       if (searchTerm !== lastSearchRef.current) {
         lastSearchRef.current = searchTerm;
-        setSearchParams({ page: '1' });
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('page', '1');
+        router.push(`/?${params.toString()}`);
       }
     },
-    [setSearchParams]
+    [searchParams, router]
   );
 
   const toPage = (newPage: number) => {
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      params.set('page', String(newPage));
-      params.delete('details');
-      return params;
-    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', String(newPage));
+    params.delete('details');
+    router.push(`/?${params.toString()}`);
     setSelectedDetailUid(null);
   };
 

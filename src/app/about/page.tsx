@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function About() {
+export default function AboutPage() {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen px-4 text-center"
@@ -28,6 +28,7 @@ export default function About() {
         </a>
         .
       </p>
+
       <p className="text-lg max-w-lg">
         It is part of the{' '}
         <a
@@ -40,6 +41,7 @@ export default function About() {
         </a>
         .
       </p>
+
       <Link
         href="/"
         className="

@@ -1,3 +1,3 @@
 export function generateStaticParams() {
-  return [{ slug: [''] }];
+  return [{ slug: [''] }, { slug: ['about'] }];
 }
