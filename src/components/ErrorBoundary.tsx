@@ -1,3 +1,5 @@
+'use client';
+
 import { Component } from 'react';
 import type { ReactNode } from 'react';
 import ThemeContext from './ThemeProvider';
@@ -17,10 +19,7 @@ export default class ErrorBoundary extends Component<
 > {
   static contextType = ThemeContext;
   declare context: React.ContextType<typeof ThemeContext>;
-  state: ErrorBoundaryState = {
-    hasError: false,
-    error: null,
-  };
+  state: ErrorBoundaryState = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
@@ -36,6 +35,7 @@ export default class ErrorBoundary extends Component<
 
   render() {
     const { theme } = this.context || { theme: 'light' };
+
     if (this.state.hasError && this.state.error) {
       return (
         <div

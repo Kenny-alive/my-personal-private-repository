@@ -33,3 +33,11 @@ export function useBookDetails(uid: string | null) {
     staleTime: 3 * 60 * 1000,
   });
 }
+
+export async function fetchBookDetailsServer(uid: string) {
+  const res = await fetch(`https://stapi.co/api/v1/rest/book?uid=${uid}`);
+  if (!res.ok) {
+    throw new Error(`Error fetching book details: ${res.status}`);
+  }
+  return res.json();
+}

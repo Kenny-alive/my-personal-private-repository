@@ -1,13 +1,20 @@
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { useTheme } from './hooks/useTheme';
 
 function Header() {
   const { theme, toggleTheme } = useTheme();
 
+  const [headerText, setHeaderText] = useState('Rendering on server');
+
+  useEffect(() => {
+    setHeaderText('React hydration, rendering on client');
+  }, []);
+
   return (
     <header className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-6 shadow-md flex justify-between items-center px-8">
-      <h1 className="text-3xl font-extrabold tracking-wide">
-        React: Routing and Hooks
+      <h1 className="text-3xl font-extrabold tracking-wide text-orange-400 animate-[pulse_1.5s_ease-in-out_infinite]">
+        {headerText}
       </h1>
       <nav className="flex gap-4 items-center">
         <Link

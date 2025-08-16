@@ -1,3 +1,5 @@
+'use client';
+
 import TopSection from './TopSection';
 import BottomSection from './BottomSection';
 import ErrorButton from './ErrorButton';
@@ -6,9 +8,10 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import BookDetails from './BookDetails';
 import { useStore } from '../store/useStore';
 import SelectedItemsFlyout from './SelectedItemFlyout';
-
 import { useBooks } from './hooks/useBooks';
 import { useBookDetails } from './hooks/useBookDetails';
+import { DehydratedState } from '@tanstack/react-query';
+import ClientProviders from './ClientProviders';
 
 export interface BookBase {
   uid: string;
@@ -18,17 +21,27 @@ export interface BookBase {
   novel?: boolean;
 }
 
-export default function App() {
+interface AppProps {
+  safePage: number;
+  initialSearchTerm: string;
+  selectedDetailUidFromServer: string | null;
+  dehydratedState?: DehydratedState;
+}
+
+export default function App({
+  safePage: safePageFromServer,
+  initialSearchTerm,
+  selectedDetailUidFromServer,
+  dehydratedState,
+}: AppProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const rawPage = searchParams.get('page');
-  const page = Number(rawPage);
-  const safePage = Number.isInteger(page) && page > 0 ? page : 1;
+  const lastSearchRef = useRef<string>(initialSearchTerm);
 
-  const lastSearchRef = useRef<string>('');
-
-  const selectedDetailUid = useStore((state) => state.selectedDetailUid);
+  const selectedDetailUid = useStore(
+    (state) => state.selectedDetailUid ?? selectedDetailUidFromServer
+  );
   const setSelectedDetailUid = useStore((state) => state.setSelectedDetailUid);
 
   const {
@@ -38,7 +51,7 @@ export default function App() {
     isError: booksErrorFlag,
     error: booksError,
     refetch,
-  } = useBooks(lastSearchRef.current, safePage);
+  } = useBooks(lastSearchRef.current, safePageFromServer);
 
   const {
     data: detailData,
@@ -50,9 +63,7 @@ export default function App() {
 
   useEffect(() => {
     const detailsUid = searchParams.get('details');
-    if (detailsUid) {
-      setSelectedDetailUid(detailsUid);
-    }
+    if (detailsUid) setSelectedDetailUid(detailsUid);
   }, [searchParams, setSelectedDetailUid]);
 
   const onSelectBook = useCallback(
@@ -96,9 +107,8 @@ export default function App() {
   const lastPage = booksData?.lastPage ?? false;
 
   return (
-    <>
+    <ClientProviders dehydratedState={dehydratedState}>
       <TopSection onSearch={handleSearch} />
-
       <div className="flex justify-center items-center my-4 gap-4">
         <button
           onClick={async () => {
@@ -116,55 +126,14 @@ export default function App() {
         <div className="min-w-[200px]">
           {booksLoading && (
             <span className="flex items-center text-sm text-indigo-600 font-semibold block ml-4">
-              <svg
-                className="animate-spin h-5 w-5 mr-2 text-indigo-600"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
-              Fetching book list from server...
+              Fetching book list...
             </span>
           )}
-
           {!booksLoading && booksFetching && (
             <span className="flex items-center text-sm text-indigo-600 font-semibold block ml-4">
-              <svg
-                className="animate-spin h-5 w-5 mr-2 text-indigo-600"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
               Updating book list...
             </span>
           )}
-
           {booksErrorFlag && (
             <span className="text-sm text-red-600 font-semibold block ml-4">
               Error: {(booksError as Error).message}
@@ -184,20 +153,17 @@ export default function App() {
 
           <div className="flex justify-center gap-4 py-6">
             <button
-              onClick={() => toPage(safePage - 1)}
-              disabled={safePage <= 1}
+              onClick={() => toPage(safePageFromServer - 1)}
+              disabled={safePageFromServer <= 1}
               className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
             >
               Previous
             </button>
-            <span
-              className="px-4 py-2 text-lg font-semibold"
-              style={{ color: 'var(--text-color)' }}
-            >
-              Page {safePage}
+            <span className="px-4 py-2 text-lg font-semibold">
+              Page {safePageFromServer}
             </span>
             <button
-              onClick={() => toPage(safePage + 1)}
+              onClick={() => toPage(safePageFromServer + 1)}
               disabled={lastPage || books.length === 0}
               className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
             >
@@ -207,13 +173,7 @@ export default function App() {
         </div>
 
         {selectedDetailUid && (
-          <div
-            className="w-1/3 border-gray-300 p-4 bg-white"
-            style={{
-              backgroundColor: 'var(--bg-color)',
-              color: 'var(--text-color)',
-            }}
-          >
+          <div className="w-1/3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
             <BookDetails
               book={detailData?.book ?? null}
               loading={detailsLoading}
@@ -227,6 +187,6 @@ export default function App() {
 
       <ErrorButton />
       <SelectedItemsFlyout />
-    </>
+    </ClientProviders>
   );
 }

@@ -2,16 +2,36 @@
 
 import { ReactNode } from 'react';
 import { ThemeProvider } from '../components/ThemeProvider';
-import { QueryClientProvider } from '@tanstack/react-query';
+import {
+  HydrationBoundary,
+  QueryClientProvider,
+  DehydratedState,
+} from '@tanstack/react-query';
 import { queryClient } from '../libs/queryClient';
 import ErrorBoundary from '../components/ErrorBoundary';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-export default function ClientProviders({ children }: { children: ReactNode }) {
+interface ClientProvidersProps {
+  children: ReactNode;
+  dehydratedState?: DehydratedState | null;
+}
+
+export default function ClientProviders({
+  children,
+  dehydratedState,
+}: ClientProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </ThemeProvider>
+      <HydrationBoundary state={dehydratedState}>
+        <ThemeProvider>
+          <ErrorBoundary>
+            {children}
+            {process.env.NODE_ENV === 'development' && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
+          </ErrorBoundary>
+        </ThemeProvider>
+      </HydrationBoundary>
     </QueryClientProvider>
   );
 }

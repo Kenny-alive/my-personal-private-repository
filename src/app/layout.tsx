@@ -6,8 +6,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <title>Functional Components</title>
+        <title>RSC: Really Slow Components</title>
       </head>
       <body>
         <ClientProviders>{children}</ClientProviders>
