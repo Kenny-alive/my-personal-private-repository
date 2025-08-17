@@ -1,6 +1,8 @@
+'use client';
+
 import { useStore } from '../store/useStore';
-import { GenerateCSV } from './GenerateCSV';
 import { DownloadCSV } from './DownloadCSV';
+import { GenerateCSVServer } from './GenerateCSVServer';
 
 export default function SelectedItemsFlyout() {
   const selectedItems = useStore((state) => state.selectedItems);
@@ -12,7 +14,7 @@ export default function SelectedItemsFlyout() {
   const filename = `${selectedCount}_items.csv`;
 
   return (
-    <GenerateCSV items={selectedItems}>
+    <GenerateCSVServer items={selectedItems}>
       {(csv) => (
         <div
           className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 flex justify-between items-center shadow-lg"
@@ -32,6 +34,6 @@ export default function SelectedItemsFlyout() {
           </div>
         </div>
       )}
-    </GenerateCSV>
+    </GenerateCSVServer>
   );
 }
