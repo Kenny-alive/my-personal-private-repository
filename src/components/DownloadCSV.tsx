@@ -1,9 +1,15 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 interface DownloadCSVProps {
   csv: string;
   filename: string;
 }
 
 export function DownloadCSV({ csv, filename }: DownloadCSVProps) {
+  const t = useTranslations('DownloadCSV');
+
   const handleDownload = () => {
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -23,7 +29,7 @@ export function DownloadCSV({ csv, filename }: DownloadCSVProps) {
       disabled={!csv}
       className="px-4 py-2 bg-indigo-600 text-white rounded disabled:opacity-50"
     >
-      Download
+      {t('download')}
     </button>
   );
 }

@@ -4,26 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
-    "preview": "vite preview",
     "format:fix": "prettier --write .",
     "prepare": "husky install",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.84.1",
+    "next": "^15.4.6",
+    "next-intl": "^4.3.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router": "^7.7.1",
     "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
     "@tailwindcss/cli": "^4.1.11",
-    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/postcss": "^4.1.12",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/react-query-devtools": "^5.84.1",
     "@testing-library/jest-dom": "^6.6.3",
@@ -48,12 +49,11 @@
     "lint-staged": "^16.1.2",
     "postcss": "^8.5.6",
     "prettier": "3.6.2",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "^3.4.17",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
-    "typescript-eslint": "^8.34.1",
-    "vite": "^7.0.0"
+    "typescript-eslint": "^8.34.1"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

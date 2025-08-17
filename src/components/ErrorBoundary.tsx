@@ -1,9 +1,11 @@
-import { Component } from 'react';
-import type { ReactElement } from 'react';
+'use client';
+
+import { Component, ReactNode } from 'react';
 import ThemeContext from './ThemeProvider';
+import { ReloadButton } from './ReloadButton';
 
 interface ErrorBoundaryProps {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 interface ErrorBoundaryState {
@@ -17,10 +19,7 @@ export default class ErrorBoundary extends Component<
 > {
   static contextType = ThemeContext;
   declare context: React.ContextType<typeof ThemeContext>;
-  state: ErrorBoundaryState = {
-    hasError: false,
-    error: null,
-  };
+  state: ErrorBoundaryState = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
@@ -36,6 +35,7 @@ export default class ErrorBoundary extends Component<
 
   render() {
     const { theme } = this.context || { theme: 'light' };
+
     if (this.state.hasError && this.state.error) {
       return (
         <div
@@ -51,16 +51,14 @@ export default class ErrorBoundary extends Component<
             className="w-60 h-auto mb-6"
           />
           <p
-            className={`text-lg mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}
+            className={`text-lg mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-800'
+            }`}
           >
             {this.state.error.message}
           </p>
-          <button
-            onClick={this.handleReload}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition cursor-pointer"
-          >
-            Reload App
-          </button>
+
+          <ReloadButton onReload={this.handleReload} />
         </div>
       );
     }

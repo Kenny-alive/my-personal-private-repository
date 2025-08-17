@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
@@ -9,6 +13,8 @@ export default function SearchBar({
   onChange,
   onSearch,
 }: SearchBarProps) {
+  const t = useTranslations('SearchBar');
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
@@ -35,7 +41,7 @@ export default function SearchBar({
         value={value}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder="Search Star Trek books..."
+        placeholder={t('placeholder')}
       />
       <button
         className="px-5 py-2 rounded transition"
@@ -45,7 +51,7 @@ export default function SearchBar({
         }}
         onClick={onSearch}
       >
-        Search
+        {t('button')}
       </button>
     </div>
   );

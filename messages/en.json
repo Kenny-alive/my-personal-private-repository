@@ -1,0 +1,56 @@
+{
+  "App": {
+    "title": "Book Library",
+    "refresh": "Refresh Books",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page}",
+    "fetchingBooks": "Fetching book list...",
+    "updatingBooks": "Updating book list...",
+    "error": "Error: {message}"
+  },
+  "Header": {
+    "about": "About",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "serverText": "Rendering on server",
+    "clientText": "React hydration, rendering on client",
+    "localeButton": "Switch to Russian"
+  },
+  "About": {
+    "title": "About This App",
+    "createdByBefore": "This application was created by ",
+    "creatorName": "Sergey Kudrin",
+    "createdByAfter": ".",
+    "partOfBefore": "It is part of the ",
+    "courseName": "RS School React Course",
+    "partOfAfter": ".",
+    "backToApp": "Back to App"
+  },
+  "Loading": {
+    "loading": "Loading..."
+  },
+  "SearchBar": {
+    "placeholder": "Search Star Trek books...",
+    "button": "Search"
+  },
+  "SelectedItemsFlyout": {
+    "selectedCount": "{count} item{count, plural, one {} other {s}} are selected",
+    "unselectAll": "Unselect all",
+    "filename": "{count}_items.csv"
+  },
+  "DownloadCSV": {
+    "download": "Download"
+  },
+  "ErrorButton": {
+    "buttonLabel": "Error Button",
+    "throwMessage": "Test error thrown from ErrorButton!"
+  },
+  "ErrorBoundary": {
+    "reload": "Reload App"
+  },
+  "NotFound": {
+    "pageNotFound": "Page Not Found",
+    "goHome": "Go Home"
+  }
+}

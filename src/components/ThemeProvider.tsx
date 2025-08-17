@@ -1,4 +1,6 @@
-import { createContext, useState, ReactNode, useLayoutEffect } from 'react';
+'use client';
+
+import { createContext, useState, useEffect, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -10,12 +12,14 @@ interface ThemeType {
 const ThemeContext = createContext<ThemeType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('app-theme') as Theme | null;
-    return saved ?? 'light';
-  });
+  const [theme, setTheme] = useState<Theme>('light');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    const saved = localStorage.getItem('app-theme') as Theme | null;
+    if (saved) setTheme(saved);
+  }, []);
+
+  useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
