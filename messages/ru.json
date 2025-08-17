@@ -1,0 +1,52 @@
+{
+  "App": {
+    "title": "Библиотека книг",
+    "refresh": "Обновить список",
+    "previous": "Назад",
+    "next": "Вперёд",
+    "page": "Страница {page}",
+    "fetchingBooks": "Загрузка списка книг...",
+    "updatingBooks": "Обновление списка книг...",
+    "error": "Ошибка: {message}"
+  },
+  "Header": {
+    "about": "О приложении",
+    "darkMode": "Темная тема",
+    "lightMode": "Светлая тема",
+    "serverText": "Рендер на сервере",
+    "clientText": "Гидратация React, рендер на клиенте",
+    "localeButton": "Переключить на английский"
+  },
+  "About": {
+    "title": "О приложении",
+    "createdByBefore": "Это приложение создано ",
+    "creatorName": "Sergey Kudrin",
+    "createdByAfter": ".",
+    "partOfBefore": "Оно является частью ",
+    "courseName": "RS School React Course",
+    "partOfAfter": ".",
+    "backToApp": "Вернуться в приложение"
+  },
+  "Loading": {
+    "loading": "Загрузка..."
+  },
+  "SearchBar": {
+    "placeholder": "Поиск книг Star Trek...",
+    "button": "Поиск"
+  },
+  "SelectedItemsFlyout": {
+    "selectedCount": "Выбрано {count} {count, plural, one {элемент} few {элемента} many {элементов} other {элемента}}",
+    "unselectAll": "Снять выделение",
+    "filename": "{count, plural, one {#_элемент.csv} few {#_элемента.csv} many {#_элементов.csv} other {#_элемента.csv}}"
+  },
+  "DownloadCSV": {
+    "download": "Скачать"
+  },
+  "ErrorButton": {
+    "buttonLabel": "Кнопка ошибки",
+    "throwMessage": "Тестовая ошибка вызвана из ErrorButton!"
+  },
+  "ErrorBoundary": {
+    "reload": "Перезапустить приложение"
+  }
+}

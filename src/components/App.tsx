@@ -3,6 +3,7 @@
 import TopSection from './TopSection';
 import BottomSection from './BottomSection';
 import ErrorButton from './ErrorButton';
+import BookFetchStatus from './BookFetchStatus';
 import { useCallback, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import BookDetails from './BookDetails';
@@ -12,6 +13,7 @@ import { useBooks } from './hooks/useBooks';
 import { useBookDetails } from './hooks/useBookDetails';
 import { DehydratedState } from '@tanstack/react-query';
 import ClientProviders from './ClientProviders';
+import { useTranslations } from 'next-intl';
 
 export interface BookBase {
   uid: string;
@@ -34,6 +36,7 @@ export default function App({
   selectedDetailUidFromServer,
   dehydratedState,
 }: AppProps) {
+  const t = useTranslations('App');
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -109,38 +112,15 @@ export default function App({
   return (
     <ClientProviders dehydratedState={dehydratedState}>
       <TopSection onSearch={handleSearch} />
-      <div className="flex justify-center items-center my-4 gap-4">
-        <button
-          onClick={async () => {
-            try {
-              await refetch({ throwOnError: true });
-            } catch (err) {
-              console.error('Refetch error', err);
-            }
-          }}
-          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-        >
-          Refresh Books
-        </button>
 
-        <div className="min-w-[200px]">
-          {booksLoading && (
-            <span className="flex items-center text-sm text-indigo-600 font-semibold block ml-4">
-              Fetching book list...
-            </span>
-          )}
-          {!booksLoading && booksFetching && (
-            <span className="flex items-center text-sm text-indigo-600 font-semibold block ml-4">
-              Updating book list...
-            </span>
-          )}
-          {booksErrorFlag && (
-            <span className="text-sm text-red-600 font-semibold block ml-4">
-              Error: {(booksError as Error).message}
-            </span>
-          )}
-        </div>
-      </div>
+      <BookFetchStatus
+        loading={booksLoading}
+        fetching={booksFetching}
+        error={booksErrorFlag ? (booksError as Error) : null}
+        onRefetch={() => {
+          refetch().catch((err) => console.error('Refetch error', err));
+        }}
+      />
 
       <div className="flex min-h-[70vh] pb-28">
         <div className="flex-1 pr-4">
@@ -157,17 +137,19 @@ export default function App({
               disabled={safePageFromServer <= 1}
               className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
             >
-              Previous
+              {t('previous')}
             </button>
+
             <span className="px-4 py-2 text-lg font-semibold">
-              Page {safePageFromServer}
+              {t('page', { page: safePageFromServer })}
             </span>
+
             <button
               onClick={() => toPage(safePageFromServer + 1)}
               disabled={lastPage || books.length === 0}
               className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
             >
-              Next
+              {t('next')}
             </button>
           </div>
         </div>

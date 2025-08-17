@@ -2,8 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import '../../main.css';
-import type { BookBase } from '../components/App';
-import type { DetailedBook } from '../components/BookDetails';
+import type { BookBase } from '../../components/App';
+import type { DetailedBook } from '../../components/BookDetails';
 
 export interface ClientOnlyProps {
   booksData: { books: BookBase[]; lastPage: boolean };
@@ -21,7 +21,7 @@ interface AppProps {
   selectedDetailUidFromServer: string | null;
 }
 
-const App = dynamic<AppProps>(() => import('../components/App'), {
+const App = dynamic<AppProps>(() => import('../../components/App'), {
   ssr: false,
 });
 

@@ -1,14 +1,14 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { ThemeProvider } from '../components/ThemeProvider';
+import { ThemeProvider } from './ThemeProvider';
 import {
-  HydrationBoundary,
   QueryClientProvider,
+  HydrationBoundary,
   DehydratedState,
 } from '@tanstack/react-query';
 import { queryClient } from '../libs/queryClient';
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 interface ClientProvidersProps {

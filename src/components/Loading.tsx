@@ -1,11 +1,19 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 export default function Loading() {
+  const t = useTranslations('Loading');
+
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div
         data-testid="spinner"
         className="w-14 h-14 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-6"
       />
-      <span className="text-2xl font-semibold text-blue-600">Loading...</span>
+      <span className="text-2xl font-semibold text-blue-600">
+        {t('loading')}
+      </span>
     </div>
   );
 }
