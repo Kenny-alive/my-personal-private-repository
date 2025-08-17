@@ -48,5 +48,9 @@
   },
   "ErrorBoundary": {
     "reload": "Reload App"
+  },
+  "NotFound": {
+    "pageNotFound": "Page Not Found",
+    "goHome": "Go Home"
   }
 }

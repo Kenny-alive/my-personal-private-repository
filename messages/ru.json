@@ -48,5 +48,9 @@
   },
   "ErrorBoundary": {
     "reload": "Перезапустить приложение"
+  },
+  "NotFound": {
+    "pageNotFound": "Страница не найдена",
+    "goHome": "На главную"
   }
 }

@@ -22,17 +22,15 @@ export default async function LocaleLayout({
 }: LocaleLayoutProps) {
   const { locale } = await params;
 
-  if (!hasLocale(locales, locale)) notFound();
+  if (!hasLocale(locales, locale)) {
+    notFound();
+  }
 
   const messages = (await import(`../../../messages/${locale}.json`)).default;
 
   return (
-    <html lang={locale}>
-      <body>
-        <ClientAppWrapper locale={locale} messages={messages}>
-          {children}
-        </ClientAppWrapper>
-      </body>
-    </html>
+    <ClientAppWrapper locale={locale} messages={messages}>
+      {children}
+    </ClientAppWrapper>
   );
 }
