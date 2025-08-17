@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '../app/[locale]/navigation';
 import { useState, useEffect } from 'react';
 import { useTheme } from './hooks/useTheme';
 import { usePathname, useRouter } from 'next/navigation';
