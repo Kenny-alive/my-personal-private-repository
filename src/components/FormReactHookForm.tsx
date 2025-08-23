@@ -13,11 +13,12 @@ type FormData = z.infer<typeof formSchema>;
 
 const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
   const addEntry = useStore((state) => state.addEntry);
+  const countries = useStore((state) => state.countries);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
@@ -33,7 +34,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
+        <label htmlFor="name">Name</label>
         <input
+          id="name"
           {...register('name')}
           placeholder="Name"
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
@@ -43,7 +46,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
         )}
       </div>
       <div>
+        <label htmlFor="age">Age</label>
         <input
+          id="age"
           type="number"
           {...register('age', { valueAsNumber: true })}
           placeholder="Age"
@@ -54,7 +59,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
         )}
       </div>
       <div>
+        <label htmlFor="email">Email</label>
         <input
+          id="email"
           {...register('email')}
           type="email"
           placeholder="Email"
@@ -65,7 +72,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
         )}
       </div>
       <div>
+        <label htmlFor="password">Password</label>
         <input
+          id="password"
           type="password"
           {...register('password')}
           placeholder="Password"
@@ -77,7 +86,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
       </div>
 
       <div>
+        <label htmlFor="confirmPassword">Confirm Password</label>
         <input
+          id="confirmPassword"
           type="password"
           {...register('confirmPassword')}
           placeholder="Confirm Password"
@@ -90,14 +101,33 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
         )}
       </div>
       <div className="flex gap-4">
-        <label>
-          <input type="radio" {...register('gender')} value="male" /> Male
+        <span>Gender</span>
+        <label htmlFor="gender-male">
+          <input
+            id="gender-male"
+            type="radio"
+            {...register('gender')}
+            value="male"
+          />{' '}
+          Male
         </label>
-        <label>
-          <input type="radio" {...register('gender')} value="female" /> Female
+        <label htmlFor="gender-female">
+          <input
+            id="gender-female"
+            type="radio"
+            {...register('gender')}
+            value="female"
+          />{' '}
+          Female
         </label>
-        <label>
-          <input type="radio" {...register('gender')} value="other" /> Other
+        <label htmlFor="gender-other">
+          <input
+            id="gender-other"
+            type="radio"
+            {...register('gender')}
+            value="other"
+          />{' '}
+          Decepticon
         </label>
       </div>
       {errors.gender && (
@@ -105,9 +135,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
       )}
 
       <div>
-        <label>
-          <input type="checkbox" {...register('terms')} /> Accept Terms &
-          Conditions
+        <label htmlFor="terms">
+          <input id="terms" type="checkbox" {...register('terms')} /> Accept
+          Terms & Conditions
         </label>
         {errors.terms && (
           <p className="text-red-500 text-sm">{errors.terms.message}</p>
@@ -115,7 +145,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
       </div>
 
       <div>
+        <label htmlFor="avatar">Avatar</label>
         <input
+          id="avatar"
           type="file"
           {...register('avatar')}
           accept="image/png, image/jpeg"
@@ -128,12 +160,20 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
       </div>
 
       <div>
+        <label htmlFor="country">Country</label>
         <input
+          id="country"
           type="text"
           {...register('country')}
           placeholder="Country"
+          list="country-list"
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
         />
+        <datalist id="country-list">
+          {countries.map((c) => (
+            <option key={c} value={c} />
+          ))}
+        </datalist>
         {errors.country && (
           <p className="text-red-500 text-sm">{errors.country.message}</p>
         )}
@@ -141,6 +181,7 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
 
       <button
         type="submit"
+        disabled={!isValid}
         className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
       >
         Submit
