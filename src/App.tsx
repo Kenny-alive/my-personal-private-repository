@@ -27,9 +27,9 @@ const App: React.FC = () => {
             className={`p-6 rounded-lg shadow-md w-full max-w-md ${modalClasses}`}
           >
             {modalType === 'uncontrolled' ? (
-              <FormUncontrolled />
+              <FormUncontrolled onClose={closeModal} />
             ) : (
-              <FormReactHookForm />
+              <FormReactHookForm onClose={closeModal} />
             )}
           </div>
         </Modal>

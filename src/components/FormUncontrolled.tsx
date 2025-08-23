@@ -1,17 +1,31 @@
 import React from 'react';
+import { useStore } from '../store/store';
 
-const FormUncontrolled: React.FC = () => {
+interface FormUncontrolledProps {
+  onClose?: () => void;
+}
+
+const FormUncontrolled: React.FC<FormUncontrolledProps> = ({ onClose }) => {
+  const addEntry = useStore((state) => state.addEntry);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       name: { value: string };
       age: { value: string };
+      email: { value: string };
     };
-    const data = {
+
+    const entry = {
+      id: crypto.randomUUID(),
       name: target.name.value,
-      age: target.age.value,
+      age: Number(target.age.value),
+      email: target.email.value,
     };
-    console.log('Uncontrolled form data:', data);
+
+    addEntry(entry);
+    console.log('Uncontrolled form data:', entry);
+
+    if (onClose) onClose();
   };
 
   return (
@@ -28,6 +42,14 @@ const FormUncontrolled: React.FC = () => {
           name="age"
           type="number"
           placeholder="Age"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+        />
+      </div>
+      <div>
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
         />
       </div>
