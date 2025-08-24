@@ -18,16 +18,36 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    reset,
+    formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
 
-  const onSubmit = (data: FormData) => {
-    const entry = { id: crypto.randomUUID(), ...data };
+  const onSubmit = async (data: FormData) => {
+    let avatarBase64: string | undefined;
+    if (data.avatar?.[0]) {
+      avatarBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(data.avatar[0]);
+      });
+    }
+
+    const entry = {
+      id: crypto.randomUUID(),
+      name: data.name,
+      age: data.age,
+      email: data.email,
+      password: data.password,
+      gender: data.gender,
+      country: data.country,
+      avatar: avatarBase64,
+    };
     addEntry(entry);
-    console.log('React Hook Form data:', entry);
+    reset();
     if (onClose) onClose();
   };
 
@@ -181,7 +201,6 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
 
       <button
         type="submit"
-        disabled={!isValid}
         className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
       >
         Submit

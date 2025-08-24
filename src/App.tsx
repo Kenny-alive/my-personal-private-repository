@@ -3,6 +3,7 @@ import TopSection from '../src/components/TopSection';
 import Modal from '../src/components/Modal';
 import FormUncontrolled from '../src/components/FormUncontrolled';
 import FormReactHookForm from '../src/components/FormReactHookForm';
+import BottomSection from '../src/components/BottomSection';
 
 export type ModalType = 'uncontrolled' | 'rhf' | null;
 
@@ -34,6 +35,7 @@ const App: React.FC = () => {
           </div>
         </Modal>
       )}
+      <BottomSection />
     </div>
   );
 };
