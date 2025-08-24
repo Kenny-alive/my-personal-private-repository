@@ -61,7 +61,11 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      data-testid="form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+    >
       <div>
         <label htmlFor="name">Name</label>
         <input

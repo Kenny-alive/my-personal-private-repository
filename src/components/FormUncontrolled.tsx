@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store/store';
+import { getPasswordStrength } from '../utils/passwordStrength';
 
 interface FormUncontrolledProps {
   onClose?: () => void;
@@ -13,31 +14,30 @@ const FormUncontrolled: React.FC<FormUncontrolledProps> = ({ onClose }) => {
   const addEntry = useStore((state) => state.addEntry);
   const countries = useStore((state) => state.countries);
   const [errors, setErrors] = useState<Errors>({});
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    setPasswordStrength(getPasswordStrength(password));
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors({});
-    const target = e.target as typeof e.target & {
-      name: { value: string };
-      age: { value: string };
-      email: { value: string };
-      password: { value: string };
-      confirmPassword: { value: string };
-      gender: { value: string };
-      terms: { checked: boolean };
-      avatar: { files: FileList };
-      country: { value: string };
-    };
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const name = ((formData.get('name') as string) || '').trim();
+    const ageValue = ((formData.get('age') as string) || '').trim();
+    const age = ageValue ? Number(ageValue) : NaN;
+    const email = ((formData.get('email') as string) || '').trim();
+    const password = (formData.get('password') as string) || '';
+    const confirmPassword = (formData.get('confirmPassword') as string) || '';
+    const gender = (formData.get('gender') as string) || '';
+    const terms = formData.get('terms') === 'on';
+    const country = ((formData.get('country') as string) || '').trim();
+    const avatarFile = (form.elements.namedItem('avatar') as HTMLInputElement)
+      .files?.[0];
 
     const newErrors: Errors = {};
-    const name = target.name.value.trim();
-    const age = Number(target.age.value);
-    const email = target.email.value.trim();
-    const password = target.password.value;
-    const confirmPassword = target.confirmPassword.value;
-    const gender = target.gender.value;
-    const terms = target.terms.checked;
-    const country = target.country.value.trim();
-    const avatarFile = target.avatar.files[0];
 
     if (!name || !/^[A-Z]/.test(name))
       newErrors.name = 'Name must start with uppercase';
@@ -86,6 +86,7 @@ const FormUncontrolled: React.FC<FormUncontrolledProps> = ({ onClose }) => {
 
     addEntry(entry);
     setErrors({});
+    setPasswordStrength(0);
 
     if (onClose) onClose();
   };
@@ -131,11 +132,35 @@ const FormUncontrolled: React.FC<FormUncontrolledProps> = ({ onClose }) => {
           name="password"
           type="password"
           placeholder="Password"
+          onChange={handlePasswordChange}
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
         />
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password}</p>
         )}
+        <div className="mt-1 h-2 w-full bg-gray-200 rounded">
+          <div
+            className={`h-2 rounded transition-all duration-300 ${
+              passwordStrength === 0
+                ? 'w-0'
+                : passwordStrength === 1
+                  ? 'w-1/4 bg-red-500'
+                  : passwordStrength === 2
+                    ? 'w-1/2 bg-yellow-500'
+                    : passwordStrength === 3
+                      ? 'w-3/4 bg-green-400'
+                      : 'w-full bg-green-600'
+            }`}
+          />
+        </div>
+        <p className="text-sm mt-1">
+          Strength:{' '}
+          {
+            ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'][
+              passwordStrength
+            ]
+          }
+        </p>
       </div>
       <div>
         <label htmlFor="confirmPassword">Confirm Password</label>

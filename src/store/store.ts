@@ -10,7 +10,7 @@ type FormEntry = {
   avatar?: string;
 };
 
-type Store = {
+export type Store = {
   entries: FormEntry[];
   countries: string[];
   addEntry: (entry: FormEntry) => void;
