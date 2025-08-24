@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formSchema } from '../utils/formSchema';
 import { useStore } from '../store/store';
 import { z } from 'zod';
+import { getPasswordStrength } from '../utils/passwordStrength';
 
 interface FormReactHookFormProps {
   onClose?: () => void;
@@ -19,11 +20,19 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    watch,
+    formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
+
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const passwordValue = watch('password');
+  useEffect(() => {
+    setPasswordStrength(getPasswordStrength(passwordValue || ''));
+  }, [passwordValue]);
 
   const onSubmit = async (data: FormData) => {
     let avatarBase64: string | undefined;
@@ -103,6 +112,29 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password.message}</p>
         )}
+        <div className="mt-1 h-2 w-full bg-gray-200 rounded">
+          <div
+            className={`h-2 rounded transition-all duration-300 ${
+              passwordStrength === 0
+                ? 'w-0'
+                : passwordStrength === 1
+                  ? 'w-1/4 bg-red-500'
+                  : passwordStrength === 2
+                    ? 'w-1/2 bg-yellow-500'
+                    : passwordStrength === 3
+                      ? 'w-3/4 bg-green-400'
+                      : 'w-full bg-green-600'
+            }`}
+          />
+        </div>
+        <p className="text-sm mt-1">
+          Strength:{' '}
+          {
+            ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'][
+              passwordStrength
+            ]
+          }
+        </p>
       </div>
 
       <div>
@@ -201,7 +233,9 @@ const FormReactHookForm: React.FC<FormReactHookFormProps> = ({ onClose }) => {
 
       <button
         type="submit"
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+        disabled={!isValid}
+        className={`px-4 py-2 rounded text-white transition
+    ${isValid ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'}`}
       >
         Submit
       </button>

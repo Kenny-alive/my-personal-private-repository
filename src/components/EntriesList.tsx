@@ -33,11 +33,14 @@ export const EntriesList = () => {
         return (
           <div
             key={entry.id}
-            className={`p-4 rounded-xl shadow transition-colors duration-500 ${
+            className={`
+            p-4 rounded-xl shadow transition-all duration-1000
+            ${
               isHighlighted
-                ? 'bg-green-100 border-2 border-green-400'
-                : 'bg-white'
-            }`}
+                ? 'bg-green-200 border-2 border-green-500'
+                : 'bg-white border border-transparent'
+            }
+          `}
           >
             <h3 className="font-semibold text-lg">{entry.name}</h3>
             <p>Age: {entry.age}</p>
