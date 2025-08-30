@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Country } from '../utils/fetchCountries';
+import CountryTable from './CountryTable';
 
 interface CountryCardProps {
   country: Country;
@@ -7,6 +8,7 @@ interface CountryCardProps {
 
 const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
   const latestData = country.data[country.data.length - 1];
+  const [showTable, setShowTable] = useState(true);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 hover:bg-blue-50">
@@ -44,6 +46,14 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
             <strong>{key.replace(/_/g, ' ')}:</strong> {value ?? 'N/A'}
           </div>
         ))}
+      <button
+        onClick={() => setShowTable((prev) => !prev)}
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+      >
+        {showTable ? 'Hide this monster' : 'Release the beast'}
+      </button>
+
+      {showTable && <CountryTable data={country.data} />}
     </div>
   );
 };
