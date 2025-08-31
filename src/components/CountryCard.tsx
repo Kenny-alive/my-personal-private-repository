@@ -1,21 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { Country } from '../utils/fetchCountries';
 import CountryTable from './CountryTable';
 import ColumnSelectorModal from './Modal';
-import { useColumnStore } from '../store/store';
+import { useColumnStore, useYearStore } from '../store/store';
 
 interface CountryCardProps {
   country: Country;
 }
 
 const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
-  const latestData = country.data[country.data.length - 1];
   const [showTable, setShowTable] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showMonster, setShowMonster] = useState(false);
   const selectedColumns = useColumnStore((state) => state.selectedColumns);
   const monsterImages = ['/cat.jpg', '/cat2.jpg', '/cat3.jpg'];
   const [currentImage, setCurrentImage] = useState<string>(monsterImages[0]);
+  const { selectedYear } = useYearStore();
+  const [highlightedFields, setHighlightedFields] = useState<string[]>([]);
+
+  const getFieldClass = (field: string) =>
+    highlightedFields.includes(field)
+      ? 'bg-yellow-200 animate-pulse transition-colors duration-700 rounded px-3 py-1 text-sm font-medium'
+      : 'bg-gray-100 rounded px-3 py-1 text-sm font-medium';
+
+  const latestData =
+    selectedYear !== null
+      ? country.data.find((d) => d.year === selectedYear) ||
+        country.data[country.data.length - 1]
+      : country.data[country.data.length - 1];
+
+  const prevDataRef = useRef(latestData);
+
+  useEffect(() => {
+    const changed: string[] = [];
+
+    if (prevDataRef.current.population !== latestData.population)
+      changed.push('population');
+    if (prevDataRef.current.co2 !== latestData.co2) changed.push('co2');
+    if (prevDataRef.current.co2_per_capita !== latestData.co2_per_capita)
+      changed.push('co2_per_capita');
+    if (prevDataRef.current.year !== latestData.year) changed.push('year');
+
+    if (changed.length > 0) {
+      setHighlightedFields(changed);
+      setTimeout(() => setHighlightedFields([]), 5000);
+    }
+
+    prevDataRef.current = latestData;
+  }, [latestData]);
 
   const toggleMonster = () => {
     const randomIndex = Math.floor(Math.random() * monsterImages.length);
@@ -32,18 +64,21 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
         </span>
       </h2>
 
-      <div className="flex flex-wrap gap-3 mb-4">
-        <div className="bg-gray-100 rounded px-3 py-1 text-sm font-medium">
+      <div
+        key={latestData.year}
+        className="flex flex-wrap gap-3 mb-4 transition duration-500 ease-in-out "
+      >
+        <div className={getFieldClass('year')}>
           <strong>Year:</strong> {latestData.year}
         </div>
-        <div className="bg-gray-100 rounded px-3 py-1 text-sm font-medium">
+        <div className={getFieldClass('population')}>
           <strong>Population:</strong>{' '}
           {latestData.population?.toLocaleString() ?? 'N/A'}
         </div>
-        <div className="bg-gray-100 rounded px-3 py-1 text-sm font-medium">
+        <div className={getFieldClass('co2')}>
           <strong>CO₂:</strong> {latestData.co2?.toLocaleString() ?? 'N/A'} Mt
         </div>
-        <div className="bg-gray-100 rounded px-3 py-1 text-sm font-medium">
+        <div className={getFieldClass('co2_per_capita')}>
           <strong>CO₂ per capita:</strong>{' '}
           {latestData.co2_per_capita?.toLocaleString() ?? 'N/A'} Mt
         </div>

@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import CountryCard from './CountryCard';
 import { countriesResource } from '../utils/countryResource';
 import LoadingFallback from './LoadingFallback';
+import YearSelector from './YearSelector';
 
 const CountryList: React.FC = () => {
   const countries = countriesResource.read();
@@ -15,9 +16,16 @@ const CountryList: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const countries = countriesResource.read();
+  const allYears = Array.from(
+    new Set(countries.flatMap((c) => c.data.map((d) => d.year)))
+  ).sort((a, b) => b - a);
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <CountryList />
+      <div className="p-6">
+        <YearSelector years={allYears} />
+        <CountryList />
+      </div>
     </Suspense>
   );
 };
