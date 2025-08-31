@@ -1,12 +1,18 @@
-import type { CountryData } from '../utils/fetchCountries';
+import type { CountryData, ExtraData } from '../utils/fetchCountries';
+
+type ExtraColumn = keyof ExtraData;
 
 interface CountryTableProps {
   data: CountryData[];
+  extraColumns?: ExtraColumn[];
 }
 
-const CountryTable: React.FC<CountryTableProps> = ({ data }) => {
+const CountryTable: React.FC<CountryTableProps> = ({
+  data,
+  extraColumns = [],
+}) => {
   return (
-    <div className="overflow-x-auto mt-4">
+    <div className="overflow-x-auto mt-4 border rounded">
       <table className="min-w-full border border-gray-200 text-sm">
         <thead className="bg-gray-100">
           <tr>
@@ -14,6 +20,11 @@ const CountryTable: React.FC<CountryTableProps> = ({ data }) => {
             <th className="px-3 py-2 border">Population</th>
             <th className="px-3 py-2 border">CO₂</th>
             <th className="px-3 py-2 border">CO₂ per capita</th>
+            {extraColumns.map((col) => (
+              <th key={col} className="px-3 py-2 border">
+                {col.replace(/_/g, ' ')}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -29,6 +40,18 @@ const CountryTable: React.FC<CountryTableProps> = ({ data }) => {
               <td className="px-3 py-2 border">
                 {yearRow.co2_per_capita?.toLocaleString() ?? 'N/A'}
               </td>
+              {extraColumns.map((col) => {
+                const value = (yearRow as Record<string, number | undefined>)[
+                  col
+                ];
+                return (
+                  <td key={col} className="px-3 py-2 border">
+                    {typeof value === 'number'
+                      ? value.toLocaleString()
+                      : (value ?? 'N/A')}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import type { Country } from '../utils/fetchCountries';
 import CountryTable from './CountryTable';
+import ColumnSelectorModal from './Modal';
+import { useColumnStore } from '../store/store';
 
 interface CountryCardProps {
   country: Country;
@@ -9,6 +11,17 @@ interface CountryCardProps {
 const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
   const latestData = country.data[country.data.length - 1];
   const [showTable, setShowTable] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [showMonster, setShowMonster] = useState(false);
+  const selectedColumns = useColumnStore((state) => state.selectedColumns);
+  const monsterImages = ['/cat.jpg', '/cat2.jpg', '/cat3.jpg'];
+  const [currentImage, setCurrentImage] = useState<string>(monsterImages[0]);
+
+  const toggleMonster = () => {
+    const randomIndex = Math.floor(Math.random() * monsterImages.length);
+    setCurrentImage(monsterImages[randomIndex]);
+    setShowMonster(true);
+  };
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 hover:bg-blue-50">
@@ -36,24 +49,57 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
         </div>
       </div>
 
-      {Object.entries(latestData)
-        .filter(
-          ([key]) =>
-            !['year', 'population', 'co2', 'co2_per_capita'].includes(key)
-        )
-        .map(([key, value]) => (
-          <div key={key} className="bg-gray-50 rounded px-3 py-1 mb-1 text-sm">
-            <strong>{key.replace(/_/g, ' ')}:</strong> {value ?? 'N/A'}
-          </div>
-        ))}
-      <button
-        onClick={() => setShowTable((prev) => !prev)}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-      >
-        {showTable ? 'Hide this monster' : 'Release the beast'}
-      </button>
+      <div className="flex gap-4 mt-4">
+        <button
+          onClick={() => {
+            setShowTable((prev) => !prev);
+            toggleMonster();
+          }}
+          className="
+      px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md
+      hover:shadow-xl hover:bg-blue-600
+      active:scale-95 active:bg-blue-700
+      transition-transform transition-colors duration-150 ease-out
+      w-48 h-10 flex justify-center items-center cursor-pointer
+    "
+        >
+          {showTable ? 'Release the beast' : 'Hide this monster '}
+        </button>
 
-      {showTable && <CountryTable data={country.data} />}
+        <button
+          onClick={() => setShowModal(true)}
+          className="
+      px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md
+      hover:shadow-xl hover:bg-green-600
+      active:scale-95 active:bg-green-700
+      transition-transform transition-colors duration-150 ease-out
+      w-48 h-10 flex justify-center items-center cursor-pointer
+    "
+        >
+          Select columns
+        </button>
+      </div>
+
+      {showTable && (
+        <CountryTable data={[latestData]} extraColumns={selectedColumns} />
+      )}
+
+      {showModal && (
+        <ColumnSelectorModal
+          allColumns={['methane', 'oil_co2', 'temperature_change_from_co2']}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
+      {showMonster && !showTable && (
+        <div className="mt-4 flex justify-center">
+          <img
+            src={currentImage}
+            alt="Monster"
+            className="w-full h-64 object-contain"
+          />
+        </div>
+      )}
     </div>
   );
 };
