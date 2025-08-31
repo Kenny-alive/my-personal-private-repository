@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useColumnStore } from '../store/store';
 
 interface ColumnSelectorModalProps {
@@ -15,16 +15,16 @@ const ColumnSelectorModal: React.FC<ColumnSelectorModalProps> = ({
     ...selectedColumns,
   ]);
 
-  const toggleColumn = (col: string) => {
+  const toggleColumn = useCallback((col: string) => {
     setTempSelection((prev) =>
       prev.includes(col) ? prev.filter((c) => c !== col) : [...prev, col]
     );
-  };
+  }, []);
 
-  const save = () => {
+  const save = useCallback(() => {
     setSelectedColumns(tempSelection);
     onClose();
-  };
+  }, [tempSelection, setSelectedColumns, onClose]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

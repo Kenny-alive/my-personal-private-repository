@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import type { Country } from '../utils/fetchCountries';
 import CountryTable from './CountryTable';
 import ColumnSelectorModal from './Modal';
@@ -13,21 +19,31 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
   const [showModal, setShowModal] = useState(false);
   const [showMonster, setShowMonster] = useState(false);
   const selectedColumns = useColumnStore((state) => state.selectedColumns);
-  const monsterImages = ['/cat.jpg', '/cat2.jpg', '/cat3.jpg'];
+  const monsterImages = useMemo(
+    () => ['/cat.jpg', '/cat2.jpg', '/cat3.jpg'],
+    []
+  );
   const [currentImage, setCurrentImage] = useState<string>(monsterImages[0]);
   const { selectedYear } = useYearStore();
   const [highlightedFields, setHighlightedFields] = useState<string[]>([]);
 
-  const getFieldClass = (field: string) =>
-    highlightedFields.includes(field)
-      ? 'bg-yellow-200 animate-pulse transition-colors duration-700 rounded px-3 py-1 text-sm font-medium'
-      : 'bg-gray-100 rounded px-3 py-1 text-sm font-medium';
+  const getFieldClass = useCallback(
+    (field: string) =>
+      highlightedFields.includes(field)
+        ? 'bg-yellow-200 animate-pulse transition-colors duration-700 rounded px-3 py-1 text-sm font-medium'
+        : 'bg-gray-100 rounded px-3 py-1 text-sm font-medium',
+    [highlightedFields]
+  );
 
-  const latestData =
-    selectedYear !== null
-      ? country.data.find((d) => d.year === selectedYear) ||
+  const latestData = useMemo(() => {
+    if (selectedYear !== null) {
+      return (
+        country.data.find((d) => d.year === selectedYear) ||
         country.data[country.data.length - 1]
-      : country.data[country.data.length - 1];
+      );
+    }
+    return country.data[country.data.length - 1];
+  }, [country.data, selectedYear]);
 
   const prevDataRef = useRef(latestData);
 
@@ -49,11 +65,11 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
     prevDataRef.current = latestData;
   }, [latestData]);
 
-  const toggleMonster = () => {
+  const toggleMonster = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * monsterImages.length);
     setCurrentImage(monsterImages[randomIndex]);
     setShowMonster(true);
-  };
+  }, [monsterImages]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 hover:bg-blue-50">
@@ -139,4 +155,4 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
   );
 };
 
-export default CountryCard;
+export default React.memo(CountryCard);
